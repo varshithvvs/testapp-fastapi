@@ -1,0 +1,35 @@
+name: CI Tests
+
+on: 
+    pull_request:
+        branches: [ main ]
+
+permissions:
+    contents: read
+
+jobs:
+  pr-check:
+    name: PR Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Build Docker
+        run: docker build .
+
+      - name: Compse Up
+        run: docker compose -f "docker-compose.yml" up -d --build
+        
+      - name: Test API
+        run: |
+            response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8000)
+            if [ $response -ge 200 ] && [ $response -lt 300 ]; then
+                echo "API is up and running, status code: $response"
+            else
+                echo "API is not responding as expected, status code: $response"
+                exit 1
+            fi
+
+      - name: Compose Down
+        run: docker compose -f "docker-compose.yml" down
