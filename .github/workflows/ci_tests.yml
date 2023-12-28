@@ -21,9 +21,6 @@ jobs:
       - name: Compose Up
         run: docker compose -f "docker-compose.yml" up -d --build
 
-      - name: Wait for API
-        run: dockerize -wait tcp://localhost:8000 -timeout 1m
-
       - name: List running containers
         run: docker ps
 
