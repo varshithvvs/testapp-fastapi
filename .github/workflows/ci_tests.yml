@@ -23,6 +23,7 @@ jobs:
         
       - name: Test API
         run: |
+            uvicorn app.main:app
             response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8000)
             if [ $response -ge 200 ] && [ $response -lt 300 ]; then
                 echo "API is up and running, status code: $response"
