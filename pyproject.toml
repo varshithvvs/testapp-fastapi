@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "testapp-fastapi"
+name = "app"
 version = "0.1.0"
 description = "This is a sample fastapi app to test ci/cd workflows"
 authors = ["varshithvvs <37666557+varshithvvs@users.noreply.github.com>"]
@@ -9,6 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 fastapi = "^0.108.0"
+uvicorn = "^0.25.0"
 
 
 [build-system]
