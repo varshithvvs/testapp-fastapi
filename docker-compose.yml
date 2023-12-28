@@ -1,8 +1,8 @@
 version: '3.9'
 
 services:
-  testappfastapi:
-    image: testappfastapi
+  app:
+    image: fastapi-app
     build:
       context: .
       dockerfile: ./Dockerfile

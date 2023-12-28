@@ -26,7 +26,8 @@ jobs:
 
       - name: Test API
         run: |
-          response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8000/)
+          sleep 10
+          response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://api:8000/)
           if [ $response -ge 200 ] && [ $response -lt 300 ]; then
               echo "API is up and running, status code: $response"
           else
