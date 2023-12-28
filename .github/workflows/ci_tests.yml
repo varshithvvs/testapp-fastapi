@@ -1,11 +1,11 @@
 name: CI Tests
 
-on: 
-    pull_request:
-        branches: [ main ]
+on:
+  pull_request:
+    branches: [main]
 
 permissions:
-    contents: read
+  contents: read
 
 jobs:
   pr-check:
@@ -18,18 +18,24 @@ jobs:
       - name: Build Docker
         run: docker build .
 
-      - name: Compse Up
+      - name: Compose Up
         run: docker compose -f "docker-compose.yml" up -d --build
-        
+
+      - name: Wait for API
+        run: dockerize -wait tcp://localhost:8000 -timeout 1m
+
+      - name: List running containers
+        run: docker ps
+
       - name: Test API
         run: |
-            response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8000/)
-            if [ $response -ge 200 ] && [ $response -lt 300 ]; then
-                echo "API is up and running, status code: $response"
-            else
-                echo "API is not responding as expected, status code: $response"
-                exit 1
-            fi
+          response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8000/)
+          if [ $response -ge 200 ] && [ $response -lt 300 ]; then
+              echo "API is up and running, status code: $response"
+          else
+              echo "API is not responding as expected, status code: $response"
+              exit 1
+          fi
 
       - name: Compose Down
         run: docker compose -f "docker-compose.yml" down
